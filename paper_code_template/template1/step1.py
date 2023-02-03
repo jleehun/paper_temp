@@ -1,7 +1,7 @@
 """
 Non-parametric
 Entropy based MNIST Classifier 
-Stage1 : saving MNIST Traing data entropy
+Stage1 : saving MNIST Training data entropy
 """
 import os 
 import torch 
@@ -12,33 +12,9 @@ from torch.utils.data import DataLoader
 
 import torchvision 
 from torch.utils.data import Dataset
-class MNISTWarpper(Dataset):
-    def __init__(self, train):
-        self.data = torchvision.MNIST()
-    
-    def __getitem__(self, x):
-        return None
-    
-    
-    def __len__(self):
-        return None
-
-def compute_entropy(digit_image):
-    assert digit_image.size() == (28,28)
-    digit_image = digit_image.flatten()
-    digit_image = digit_image / digit_image.norm() 
-    assert digit_image.sum() == 1
-    entropy =  (- digit_image * digit_image.log()).sum() # \sum - p log p
-    assert entropy >=0
-    return entropy 
-
-
-
 
 from omegaconf import OmegaConf
 import argparse
-
-
 
 # Prepare the experiment 
 parser = argparse.ArgumentParser()
@@ -58,6 +34,28 @@ if not os.path.exists(save_dir):
     os.makedirs(save_dir)
 OmegaConf.save(flags, f'{save_dir}/config.yaml')
 
+class MNISTWarpper(Dataset):
+    def __init__(self, train):
+        self.data = torchvision.MNIST()
+    
+    def __getitem__(self, x):
+        return None
+    
+    def __len__(self):
+        return None
+
+def compute_entropy(digit_image):
+    assert digit_image.size() == (28,28)
+    digit_image = digit_image.flatten()
+    digit_image = digit_image / digit_image.norm() 
+    assert digit_image.sum() == 1
+    entropy =  (- digit_image * digit_image.log()).sum() # \sum - p log p
+    assert entropy >=0
+    return entropy 
+
+
+
+
 CLS_ENTROPY = {
     str(i) : [] for i in range(10)
 }
@@ -72,8 +70,6 @@ for x,y in pbar:
     CLS_ENTROPY[y] = compute_entropy(x)
     pbar.set_description()
     
-
-
 
 # Post process CLS Entropy to make it as tensor and save it
 with open(f'{save_dir}/cls_entropy.pkl', 'wb') as f:
