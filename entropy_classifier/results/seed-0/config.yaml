@@ -1,9 +1,0 @@
-data_path: untracked
-config: config.yaml
-post_fix: ''
-seed: 0
-no_date: true
-date: 2023_02_06-15_02_06
-save_dir: results/seed-0
-start_time: 1675670579.9275126
-exp_path: results/seed-0
