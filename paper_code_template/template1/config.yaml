@@ -1,6 +1,0 @@
-learning_rate : 100
-batch_size: 64
-developer: 
-  - a
-  - b
-  - c
